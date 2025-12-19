@@ -1,6 +1,0 @@
-[submodule "sample-code-csharp"]
-	path = sample-code-csharp
-	url = https://github.com/AuthorizeNet/sample-code-csharp.git
-[submodule "sdk-dotnet"]
-	path = sdk-dotnet
-	url = https://github.com/AuthorizeNet/sdk-dotnet.git

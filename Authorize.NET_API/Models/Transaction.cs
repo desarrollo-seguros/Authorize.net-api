@@ -1,16 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
-namespace Authorize.NET_API.Models {
-    public class Transaction {
-        public decimal amount = 0.0m;
-        public MerchantAuthentication merchant { get; set; }
-        public CreditCard creditCard { get; set; }
-        public Address address { get; set; }
-        public OrderInformation orderInformation { get; set; }
-    }
+namespace Authorize.NET_API.Models
+{
+	public class Transaction
+	{
+		private Decimal amount = 0.0M;
+
+		public MerchantAuthentication Merchant { get; set; }
+
+		public CreditCard CreditCard { get; set; }
+
+		public Address Address { get; set; }
+
+		public OrderInformation OrderInformation { get; set; }
+
+		public Decimal Amount
+		{
+			get => this.amount;
+			set => this.amount = value;
+		}
+	}
 }

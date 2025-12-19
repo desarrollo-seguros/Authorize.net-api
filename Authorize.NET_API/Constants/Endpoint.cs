@@ -1,39 +1,35 @@
-﻿namespace Authorize.NET_API.Constants {
-    public static class Endpoint {
+﻿namespace Authorize.NET_API.Constants
+{
+	public static class Endpoint
+	{
+		private static Endpoint.EndPointData sandbox = new Endpoint.EndPointData()
+		{
+			Url = "https://apitest.authorize.net/xml/v1/request.api",
+			ApiLoginId = "6x7NyN6A",
+			TransactionKey = "78p6q84Xb3sL7aHj"
+		};
+		private static Endpoint.EndPointData production = new Endpoint.EndPointData()
+		{
+			Url = "https://api.authorize.net/xml/v1/request.api",
+			ApiLoginId = "macafee14",
+			TransactionKey = "9zZcW7572rk69TEX"
+		};
 
-        public class EndPointData {
-            private string url = string.Empty;
-            private string apiLoginId = string.Empty;
-            private string transactionKey = string.Empty;
+		public static Endpoint.EndPointData Sandbox => Endpoint.sandbox;
 
-            public string Url { get; set; }
-            public string ApiLoginId { get; set; }
-            public string TransactionKey { get; set; }
-        }
+		public static Endpoint.EndPointData Production => Endpoint.production;
 
-        private static EndPointData sandbox = new EndPointData {
-            Url = "https://apitest.authorize.net/xml/v1/request.api",
-            ApiLoginId = "6x7NyN6A",
-            TransactionKey = "78p6q84Xb3sL7aHj"
-        };
+		public class EndPointData
+		{
+			private string url = string.Empty;
+			private string apiLoginId = string.Empty;
+			private string transactionKey = string.Empty;
 
-        private static EndPointData production = new EndPointData {
-            Url = "https://api.authorize.net/xml/v1/request.api",
-            ApiLoginId = "",
-            TransactionKey = ""
-        };
+			public string Url { get; set; }
 
-        public static EndPointData Sandbox {
-            get {
-                return sandbox;
-            }
-        }
+			public string ApiLoginId { get; set; }
 
-        public static EndPointData Production {
-            get {
-                return production;
-            }
-        }
-
-    }
+			public string TransactionKey { get; set; }
+		}
+	}
 }

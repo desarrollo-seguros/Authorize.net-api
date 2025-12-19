@@ -1,40 +1,38 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net;
 using System.Text;
 
-namespace Authorize.NET_API.Code {
-    public static class Rest {
-
-        public static string Request (string urlEndpoint, string requestMethod, string contentType) {
-            return Request(urlEndpoint, requestMethod, contentType, "");
+namespace Authorize.NET_API.Code
+{
+    internal static class Rest
+    {
+        public static string Request(string urlEndpoint, string requestMethod, string contentType)
+        {
+            return Rest.Request(urlEndpoint, requestMethod, contentType, "");
         }
 
-        public static string Request (string urlEndpoint, string requestMethod, string contentType, string body) {
-            ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
-            
-            // Initialize request parameters
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(urlEndpoint);
-            request.Method = requestMethod;
-            request.ContentType = contentType;
-
-            // Attach a body to our request
+        public static string Request(
+          string urlEndpoint,
+          string requestMethod,
+          string contentType,
+          string body)
+        {
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            HttpWebRequest httpWebRequest = (HttpWebRequest) WebRequest.Create(urlEndpoint);
+            httpWebRequest.Method = requestMethod;
+            httpWebRequest.ContentType = contentType;
             byte[] bytes = Encoding.ASCII.GetBytes(body);
-            using (Stream requestStream = request.GetRequestStream()) {
+            using (Stream requestStream = httpWebRequest.GetRequestStream())
+            {
                 requestStream.Write(bytes, 0, bytes.Length);
-
-                // Get a response
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse()) {
+                using (HttpWebResponse response = (HttpWebResponse) httpWebRequest.GetResponse())
+                {
                     Stream responseStream = response.GetResponseStream();
-
-                    return response.StatusCode == HttpStatusCode.OK ? ToString(responseStream) : string.Empty;
+                    return response.StatusCode == HttpStatusCode.OK ? Rest.ToString(responseStream) : response.StatusDescription;
                 }
             }
         }
 
-        private static string ToString (Stream stream) {
-            return new StreamReader(stream).ReadToEnd();
-        }
-
+        private static string ToString(Stream stream) => new StreamReader(stream).ReadToEnd();
     }
 }

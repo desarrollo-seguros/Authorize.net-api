@@ -1,73 +1,76 @@
 ﻿using Authorize.NET_API.Models;
 using Newtonsoft.Json.Linq;
 
-namespace Authorize.NET_API.RequestSchema {
-    public static class Json {
+namespace Authorize.NET_API.RequestSchema
+{
+	internal static class Json
+	{
+		public static JObject AuthenticateTestRequest(Authorize.NET_API.Models.MerchantAuthentication merchant)
+		{
+			return new JObject((object) new JProperty("authenticateTestRequest", (object) new JObject((object) new JProperty("merchantAuthentication", (object) Authorize.NET_API.RequestSchema.Json.MerchantAuthentication(merchant)))));
+		}
 
-        public static JObject AuthenticateTestRequest (MerchantAuthentication merchant) {
-            JObject merchantAuthentication = MerchantAuthentication(merchant);
+		public static JObject CreateTransactionRequest(Transaction transaction)
+		{
+			JObject content1 = Authorize.NET_API.RequestSchema.Json.MerchantAuthentication(transaction.Merchant);
+			JObject content2 = Authorize.NET_API.RequestSchema.Json.Payment(transaction.CreditCard);
+			JObject content3 = Authorize.NET_API.RequestSchema.Json.BillTo(transaction.Address);
+			JObject content4 = Authorize.NET_API.RequestSchema.Json.Order(transaction.OrderInformation);
 
-            return new JObject(
-                new JProperty("authenticateTestRequest",
-                    new JObject(
-                        new JProperty("merchantAuthentication", merchantAuthentication))));
-        }
+			return new JObject((object) new JProperty("createTransactionRequest", (object) new JObject(new object[2]
+			{
+				(object) new JProperty("merchantAuthentication", (object) content1),
+				(object) new JProperty("transactionRequest", (object) new JObject(new object[5]
+				{
+					(object) new JProperty("transactionType", (object) "authCaptureTransaction"),
+					(object) new JProperty("amount", (object) transaction.Amount),
+					(object) new JProperty("payment", (object) content2),
+					(object) new JProperty("order", (object) content4),
+					(object) new JProperty("billTo", (object) content3)
+				}))
+			})));
+		}
 
-        public static JObject CreateTransactionRequest (Transaction transaction) {
-            JObject merchant = MerchantAuthentication(transaction.merchant);
-            JObject payment = Payment(transaction.creditCard);
-            JObject billTo = BillTo(transaction.address);
-            JObject order = Order(transaction.orderInformation);
-            
-            return new JObject(
-                new JProperty("createTransactionRequest",
-                    new JObject(
-                        new JProperty("merchantAuthentication", merchant),
-                        new JProperty("transactionRequest",
-                            new JObject(
-                                new JProperty("transactionType", "authCaptureTransaction"),
-                                new JProperty("amount", transaction.amount),
-                                new JProperty("payment", payment),
-                                new JProperty("order", order),
-                                new JProperty("billTo", billTo)
-                                )))));
-        }
+		private static JObject MerchantAuthentication(Authorize.NET_API.Models.MerchantAuthentication merchant)
+		{
+			return new JObject(new object[2]
+			{
+				(object) new JProperty("name", (object) merchant.ApiLoginId),
+				(object) new JProperty("transactionKey", (object) merchant.TransactionKey)
+			});
+		}
 
-        private static JObject MerchantAuthentication (MerchantAuthentication merchant) {
-            return
-                new JObject(
-                    new JProperty("name", merchant.apiLoginId),
-                    new JProperty("transactionKey", merchant.transactionKey));
-        }
+		private static JObject Payment(CreditCard creditCard)
+		{
+			return new JObject((object) new JProperty(nameof(creditCard), (object) new JObject(new object[3]
+			{
+				(object) new JProperty("cardNumber", (object) creditCard.Number),
+				(object) new JProperty("expirationDate", (object) creditCard.ExpirationDate),
+				(object) new JProperty("cardCode", (object) creditCard.Code)
+			})));
+		}
 
-        private static JObject Payment (CreditCard creditCard) {
-            return
-                new JObject(
-                    new JProperty("creditCard",
-                        new JObject(
-                            new JProperty("cardNumber", creditCard.number),
-                            new JProperty("expirationDate", creditCard.expirationDate),
-                            new JProperty("cardCode", creditCard.code))));
-        }
+		private static JObject BillTo(Address address)
+		{
+			return new JObject(new object[7]
+			{
+				(object) new JProperty("firstName", (object) address.FirstName),
+				(object) new JProperty("lastName", (object) address.LastName),
+				(object) new JProperty(nameof (address), (object) address.AddressName),
+				(object) new JProperty("city", (object) address.City),
+				(object) new JProperty("state", (object) address.State),
+				(object) new JProperty("zip", (object) address.Zip),
+				(object) new JProperty("country", (object) address.Country)
+			});
+		}
 
-        private static JObject BillTo (Address address) {
-            return
-                new JObject(
-                    new JProperty("firstName", address.firstName),
-                    new JProperty("lastName", address.lastName),
-                    new JProperty("address", address.addressName),
-                    new JProperty("city", address.city),
-                    new JProperty("state", address.state),
-                    new JProperty("zip", address.zip),
-                    new JProperty("country", address.country));
-        }
-
-        private static JObject Order (OrderInformation order) {
-            return
-                new JObject(
-                    new JProperty("invoiceNumber", order.invoiceNumber),
-                    new JProperty("description", order.description));
-        }
-
-    }
+		private static JObject Order(OrderInformation order)
+		{
+			return new JObject(new object[2]
+			{
+				(object) new JProperty("invoiceNumber", (object) order.InvoiceNumber),
+				(object) new JProperty("description", (object) order.Description)
+			});
+		}
+	}
 }

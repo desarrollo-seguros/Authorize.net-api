@@ -1,24 +1,27 @@
-﻿using Authorize.NET_API.Models;
-using System.Xml.Linq;
+﻿using System;
 
-namespace Authorize.NET_API.RequestSchema {
-    public static class Xml {
+namespace Authorize.NET_API.RequestSchema
+{
+	internal static class Xml
+	{
+		public static string AuthenticateTestRequest(Authorize.NET_API.Models.MerchantAuthentication merchant)
+		{
+			string str = Xml.MerchantAuthentication(merchant);
+			return $"{string.Empty}<authenticateTestRequest xmlns=\"AnetApi/xml/v1/schema/AnetApiSchema.xsd\"><merchantAuthentication>{str}</merchantAuthentication></authenticateTestRequest>";
+		}
 
-        public static XDocument AuthenticateTestRequest (MerchantAuthentication merchant) {
-            XDocument merchantAuthentication = MerchantAuthentication(merchant);
+		public static string SettledBatchListRequest(
+		  Authorize.NET_API.Models.MerchantAuthentication merchant,
+		  DateTime from,
+		  DateTime to)
+		{
+			string str = Xml.MerchantAuthentication(merchant);
+			return $"{string.Empty}<getSettledBatchListRequest xmlns=\"AnetApi/xml/v1/schema/AnetApiSchema.xsd\"><merchantAuthentication>{str}</merchantAuthentication><includeStatistics>true</includeStatistics><firstSettlementDate>{from.ToString("yyyy-MM-ddThh:mm:ss")}Z </firstSettlementDate><lastSettlementDate>{to.ToString("yyyy-MM-ddThh:mm:ss")}Z</lastSettlementDate></getSettledBatchListRequest>";
+		}
 
-            return 
-                new XDocument(
-                    new XElement(@"authenticateTestRequest",
-                        new XElement("merchantAuthentication", merchantAuthentication)));
-        }
-
-        private static XDocument MerchantAuthentication (MerchantAuthentication merchant) {
-            return
-                new XDocument(
-                    new XElement("name", merchant.apiLoginId),
-                    new XElement("transactionKey", merchant.transactionKey));
-        }
-
-    }
+		private static string MerchantAuthentication(Authorize.NET_API.Models.MerchantAuthentication merchant)
+		{
+			return $"{string.Empty}<name>{merchant.ApiLoginId}</name><transactionKey>{merchant.TransactionKey}</transactionKey>";
+		}
+	}
 }
