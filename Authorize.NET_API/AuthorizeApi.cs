@@ -36,7 +36,15 @@ namespace Authorize.NET_API
 
 		public static string CreateTransactionRequest(string urlEndpoint, Transaction transaction)
 		{
-			string body = JsonConvert.SerializeObject((object) Authorize.NET_API.RequestSchema.Json.CreateTransactionRequest(transaction));
+			string body = JsonConvert.SerializeObject((object) RequestSchema.Json.CreateTransactionRequest(transaction));
+			string response = Rest.Request(urlEndpoint, "POST", "application/json", body);
+			Console.WriteLine(AuthorizeApi.BuildResponse(response));
+			return response;
+		}
+
+		public static string GetTransactionDetails(string urlEndpoint, TransactionDetailsRequest transDetails)
+		{
+			string body = JsonConvert.SerializeObject((object) RequestSchema.Json.GetTransactionDetailsRequest(transDetails));
 			string response = Rest.Request(urlEndpoint, "POST", "application/json", body);
 			Console.WriteLine(AuthorizeApi.BuildResponse(response));
 			return response;

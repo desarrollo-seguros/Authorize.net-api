@@ -5,7 +5,7 @@ namespace Authorize.NET_API.RequestSchema
 {
 	internal static class Json
 	{
-		public static JObject AuthenticateTestRequest(Authorize.NET_API.Models.MerchantAuthentication merchant)
+		public static JObject AuthenticateTestRequest(Authorize.NET_API.Models.MerchantAuthentication merchant)	
 		{
 			return new JObject((object) new JProperty("authenticateTestRequest", (object) new JObject((object) new JProperty("merchantAuthentication", (object) Authorize.NET_API.RequestSchema.Json.MerchantAuthentication(merchant)))));
 		}
@@ -71,6 +71,20 @@ namespace Authorize.NET_API.RequestSchema
 				(object) new JProperty("invoiceNumber", (object) order.InvoiceNumber),
 				(object) new JProperty("description", (object) order.Description)
 			});
+		}
+
+		public static JObject GetTransactionDetailsRequest(TransactionDetailsRequest request)
+		{
+			JObject merchantAuth = MerchantAuthentication(request.Merchant);
+
+			return new JObject(
+				new JProperty("getTransactionDetailsRequest",
+					new JObject(
+						new JProperty("merchantAuthentication", merchantAuth),
+						new JProperty("transId", request.TransactionId)
+					)
+				)
+			);
 		}
 	}
 }
