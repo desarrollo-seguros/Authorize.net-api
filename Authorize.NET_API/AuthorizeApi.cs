@@ -38,7 +38,7 @@ namespace Authorize.NET_API
 		{
 			string body = JsonConvert.SerializeObject((object) RequestSchema.Json.CreateTransactionRequest(transaction));
 			string response = Rest.Request(urlEndpoint, "POST", "application/json", body);
-			Console.WriteLine(AuthorizeApi.BuildResponse(response));
+			//Console.WriteLine(AuthorizeApi.BuildResponse(response));
 			return response;
 		}
 
@@ -46,15 +46,19 @@ namespace Authorize.NET_API
 		{
 			string body = JsonConvert.SerializeObject((object) RequestSchema.Json.GetTransactionDetailsRequest(transDetails));
 			string response = Rest.Request(urlEndpoint, "POST", "application/json", body);
-			Console.WriteLine(AuthorizeApi.BuildResponse(response));
+			//Console.WriteLine(AuthorizeApi.BuildResponse(response));
 			return response;
 		}
 
-		public static string GetSettledBatchListRequest(
-		  string urlEndpoint,
-		  MerchantAuthentication merchant,
-		  DateTime from,
-		  DateTime to)
+		public static string GetMerchantDetails(string urlEndpoint, MerchantDetailsRequest merchantDetails)
+		{
+			string body = JsonConvert.SerializeObject((object) RequestSchema.Json.GetMerchantDetailsRequest(merchantDetails));
+			string response = Rest.Request(urlEndpoint, "POST", "application/json", body);
+			//Console.WriteLine(AuthorizeApi.BuildResponse(response));
+			return response;
+		}
+
+		public static string GetSettledBatchListRequest(string urlEndpoint, MerchantAuthentication merchant, DateTime from, DateTime to)
 		{
 			string body = Xml.SettledBatchListRequest(merchant, from, to);
 			string response = Rest.Request(urlEndpoint, "POST", "text/xml", body);

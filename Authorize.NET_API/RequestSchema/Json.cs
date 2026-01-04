@@ -86,5 +86,18 @@ namespace Authorize.NET_API.RequestSchema
 				)
 			);
 		}
+
+		public static JObject GetMerchantDetailsRequest(MerchantDetailsRequest request)
+		{
+			JObject merchantAuth = MerchantAuthentication(request.Merchant);
+
+			return new JObject(
+				new JProperty("getMerchantDetailsRequest",
+					new JObject(
+						new JProperty("merchantAuthentication", merchantAuth)
+					)
+				)
+			);
+		}
 	}
 }

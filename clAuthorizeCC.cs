@@ -107,38 +107,38 @@ namespace ME.Mexicard
 			return true;
 		}
 
-		public bool GetTransactionDetails(string transId)
-		{
-			Endpoint.EndPointData endPointData = this.isTest == "False" ? Endpoint.Production : Endpoint.Sandbox;
+		//public bool GetTransactionDetails(string transId)
+		//{
+		//	Endpoint.EndPointData endPointData = this.isTest == "False" ? Endpoint.Production : Endpoint.Sandbox;
 
-			TransactionDetailsRequest request = new TransactionDetailsRequest()
-			{
-				Merchant = new MerchantAuthentication()
-				{
-					ApiLoginId = endPointData.ApiLoginId,
-					TransactionKey = endPointData.TransactionKey
-				},
-				TransactionId = transId
-			};
+		//	TransactionDetailsRequest request = new TransactionDetailsRequest()
+		//	{
+		//		Merchant = new MerchantAuthentication()
+		//		{
+		//			ApiLoginId = endPointData.ApiLoginId,
+		//			TransactionKey = endPointData.TransactionKey
+		//		},
+		//		TransactionId = transId
+		//	};
 
-			try
-			{
-				this.plainResponse = AuthorizeApi.GetTransactionDetails(
-					endPointData.Url,
-					request
-				);
+		//	try
+		//	{
+		//		this.plainResponse = AuthorizeApi.GetTransactionDetails(
+		//			endPointData.Url,
+		//			request
+		//		);
 
-				JObject responseJson = JObject.Parse(this.plainResponse);
+		//		JObject responseJson = JObject.Parse(this.plainResponse);
 
-				// Aquí puedes reutilizar lógica similar a HasResultCode / BuildMessages
-				return responseJson["messages"]?["resultCode"]?.ToString() == "Ok";
-			}
-			catch (Exception ex)
-			{
-				this.msg = ex.Message;
-				return false;
-			}
-		}
+		//		// Aquí puedes reutilizar lógica similar a HasResultCode / BuildMessages
+		//		return responseJson["messages"]?["resultCode"]?.ToString() == "Ok";
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		this.msg = ex.Message;
+		//		return false;
+		//	}
+		//}
 
 		private bool HasMessages(JObject json)
 		{

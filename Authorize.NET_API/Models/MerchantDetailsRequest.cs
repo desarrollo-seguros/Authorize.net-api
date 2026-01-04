@@ -1,8 +1,7 @@
 ﻿namespace Authorize.NET_API.Models
 {
-	public class TransactionDetailsRequest
+	public class MerchantDetailsRequest
 	{
 		public MerchantAuthentication Merchant { get; set; }
-		public string TransactionId { get; set; }
 	}
 }
