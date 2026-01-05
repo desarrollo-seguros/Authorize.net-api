@@ -11,20 +11,21 @@ namespace ME.Mexicard
 	{
 		public string msg;
 		public string isTest;
-		public string netTransid;
+		internal string netTransid;
 		public TransactionDetailsResponse transactionResponse;
 		public MerchantDetailsResponse merchantResponse;
-		public byte[] pdfBytes;
+		//public byte[] pdfBytes;
 
-		public clAuthorizeInvoice()
+		public clAuthorizeInvoice(string transId)
 		{
 			this.isTest = "False";
+			this.netTransid = transId;
 			this.transactionResponse = null;
 			this.merchantResponse = null;
-			this.pdfBytes = null;
+			//this.pdfBytes = null;
 		}
 
-		public bool GenerateInvoice()
+		public bool GetAuthorizeData()
 		{
 			this.msg = string.Empty;
 
@@ -40,18 +41,21 @@ namespace ME.Mexicard
 			if (!GetTransactionDetails())
 				return false;
 
-			pdfBase pdf = new pdfBase(transactionResponse, merchantResponse);
+			return true;
+		}
 
+		public Byte[] GenerateInvoice()
+		{
 			try
 			{
-				this.pdfBytes = pdf.Invoice();
+				pdfBase pdf = new pdfBase(transactionResponse, merchantResponse);
 
-				return true;
+				return pdf.Invoice();
 			}
 			catch (Exception ex)
 			{
 				this.msg = ex.Message;
-				return false;
+				return null;
 			}
 		}
 
