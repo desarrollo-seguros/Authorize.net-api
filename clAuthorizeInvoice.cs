@@ -14,7 +14,6 @@ namespace ME.Mexicard
 		internal string netTransid;
 		public TransactionDetailsResponse transactionResponse;
 		public MerchantDetailsResponse merchantResponse;
-		//public byte[] pdfBytes;
 
 		public clAuthorizeInvoice(string transId)
 		{
@@ -22,7 +21,6 @@ namespace ME.Mexicard
 			this.netTransid = transId;
 			this.transactionResponse = null;
 			this.merchantResponse = null;
-			//this.pdfBytes = null;
 		}
 
 		public bool GetAuthorizeData()
